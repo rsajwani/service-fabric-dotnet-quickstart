@@ -5,12 +5,20 @@
 
 namespace VotingData.Controllers
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Management;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Xml.Linq;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.ServiceFabric.Data;
     using Microsoft.ServiceFabric.Data.Collections;
+    using Newtonsoft.Json.Linq;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
 
     [Route("api/[controller]")]
     public class VoteDataController : Controller
@@ -23,7 +31,7 @@ namespace VotingData.Controllers
         }
 
         // GET api/VoteData
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> Get()
         {
             CancellationToken ct = new CancellationToken();
@@ -45,7 +53,7 @@ namespace VotingData.Controllers
 
                 return this.Json(result);
             }
-        }
+        }*/
 
         // PUT api/VoteData/name
         [HttpPut("{name}")]
@@ -81,6 +89,14 @@ namespace VotingData.Controllers
                     return new NotFoundResult();
                 }
             }
+        }
+
+        // GET api/VoteData
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            List<List<KeyValuePair<string, string>>> listOfLists = WmiHelper.getAllSSDs();
+            return this.Json(listOfLists);
         }
     }
 }

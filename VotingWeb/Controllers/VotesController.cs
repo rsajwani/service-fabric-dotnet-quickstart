@@ -35,7 +35,7 @@ namespace VotingWeb.Controllers
         }
 
         // GET: api/Votes
-        [HttpGet("")]
+        /*[HttpGet("")]
         public async Task<IActionResult> Get()
         {
             Uri serviceName = VotingWeb.GetVotingDataServiceName(this.serviceContext);
@@ -60,7 +60,52 @@ namespace VotingWeb.Controllers
                     result.AddRange(JsonConvert.DeserializeObject<List<KeyValuePair<string, int>>>(await response.Content.ReadAsStringAsync()));
                 }
             }
+            return this.Json(result);
+        }*/
 
+        // GET: api/Votes
+        [HttpGet("")]
+        public async Task<IActionResult> Get()
+        {
+            Uri serviceName = VotingWeb.GetVotingDataServiceName(this.serviceContext);
+            Uri proxyAddress = this.GetProxyAddress(serviceName);
+
+            ServicePartitionList partitions = await this.fabricClient.QueryManager.GetPartitionListAsync(serviceName);
+
+            List<List<KeyValuePair<string, string>>> result = new List<List<KeyValuePair<string, string>>>();
+
+            foreach (Partition partition in partitions)
+            {
+                string proxyUrl =
+                    $"{proxyAddress}/api/VoteData?PartitionKey={((Int64RangePartitionInformation)partition.PartitionInformation).LowKey}&PartitionKind=Int64Range";
+
+                using (HttpResponseMessage response = await this.httpClient.GetAsync(proxyUrl))
+                {
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        result = JsonConvert.DeserializeObject<List<List<KeyValuePair<string, string>>>>(jsonString);
+                        //CustomResponse jsoneResponse = JsonConvert.DeserializeObject<CustomResponse>(tmp);
+                    
+                        //foreach (List<KeyValuePair<string, string>> innerList in resultList)
+                        //{
+                            //foreach (var tpl in innerList)
+                            //{
+                                //result.AddRange(JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(innerList.ToString()));
+                            //}
+                        //}
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+            }
             return this.Json(result);
         }
 

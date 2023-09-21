@@ -69,7 +69,8 @@ var fnToString = hasOwn.toString;
 
 var ObjectFunctionString = fnToString.call( Object );
 
-var support = {};
+var sup
+{};
 
 
 

@@ -6,12 +6,24 @@
 namespace VotingWeb.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Fabric;
+    using System.Fabric.Query;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Xml.Linq;
 
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            
+            List<NodeModel> nodes = await NodeModel.GetNodesFromServiceFabric();
+
+            return this.View(nodes);
+            //return this.View();
         }
 
         public IActionResult Error()

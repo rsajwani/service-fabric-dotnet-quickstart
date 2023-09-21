@@ -38,6 +38,7 @@ namespace VotingData
                     serviceContext =>
                         new KestrelCommunicationListener(
                             serviceContext,
+                            "ServiceEndpoint",
                             (url, listener) =>
                             {
                                 ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
@@ -55,10 +56,10 @@ namespace VotingData
                                             .AddSingleton<IReliableStateManager>(this.StateManager))
                                     .UseContentRoot(Directory.GetCurrentDirectory())
                                     .UseStartup<Startup>()
-                                    .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseUniqueServiceUrl)
+                                    .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
                                     .UseUrls(url)
                                     .Build();
-                            }))
+                            }),"", true)
             };
         }
     }

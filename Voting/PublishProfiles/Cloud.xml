@@ -20,7 +20,7 @@
                                     AzureActiveDirectory="true"
                                     ServerCertThumbprint="0123456789012345678901234567890123456789" />
   -->
-  <ClusterConnectionParameters ConnectionEndpoint="rameez-sf-2.eastus.cloudapp.azure.com:19000" X509Credential="true" ServerCertThumbprint="B2A6A8A4FE005D9BBDF4D04B1377AF4672320072" FindType="FindByThumbprint" FindValue="B2A6A8A4FE005D9BBDF4D04B1377AF4672320072" StoreLocation="CurrentUser" StoreName="My" />
+  <ClusterConnectionParameters ConnectionEndpoint="sf-demo1.eastus.cloudapp.azure.com:19000" X509Credential="true" ServerCertThumbprint="7DF8517BDFDBEE4C3ED0340B64AECF1CB3ABD8C3" FindType="FindByThumbprint" FindValue="7DF8517BDFDBEE4C3ED0340B64AECF1CB3ABD8C3" StoreLocation="CurrentUser" StoreName="My" />
   <ApplicationParameterFile Path="..\ApplicationParameters\Cloud.xml" />
   <UpgradeDeployment Mode="Monitored" Enabled="false">
     <Parameters FailureAction="Rollback" Force="True" />

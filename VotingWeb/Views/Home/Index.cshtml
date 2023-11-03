@@ -1,7 +1,7 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "Control Plane";
 }
-@model List<VotingWeb.Controllers.NodeModel>
+@model VotingWeb.Models.Cluster
 
 <div ng-controller="VotingAppController" ng-init="refresh()">
     <div class="container-fluid">
@@ -11,247 +11,279 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-8 col-xs-offset-2">
-                <form class="col-xs-12 center-block">               
-                    <button id="btnAdd" class="btn btn-default" ng-click="refresh()">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        Refresh Node List
-                    </button>
-                </form>
-            </div>
-        </div>
 
+		<div align="center">
+			<h1>Node View</h1>
+			<table class="table" id="ClusterListTable1" border="1">
+				<thead>
+					<tr>
+						<th>
+							Cluster Name
+						</th>
+						<th>
+							Regions
+						</th>
+						<th>
+							Node Count
+						</th>
+						<th>
+							Media Nodes
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							@Model.Name
+						</td>
+						<td>
+							@Model.Region
+						</td>
+						<td>
+							@Model.NodeCount
+						</td>
+						<td>
+							@foreach (var node in Model.MediaNodes)
+							{
+								<table class="table" id="NodeListTable" border="1">
+									<thead>
+										<tr>
+											<th>
+												Node Name
+											</th>
+											<th>
+												Service Url
+											</th>
+											<th>
+												Health
+											</th>
+											<th>
+												Block Devices
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												@node.NodeName
+											</td>
+											<td>
+												@node.ServiceUrl
+											</td>
+											<td>
+												@node.Health
+											</td>
+											<td>
+												@foreach (var device in node.BlockDevices)
+												{
+													<table class="table" id="DeviceListTable" border="1">
+														<thead>
+															<tr>
+																<th>Name</th>
+																<th>MountPoints</th>
+																<th>Size</th>
+																<th>Type</th>
+																<th>FsType</th>
+																<th>FsUsed</th>
+																<th>Group</th>
+																<th>Subsystem</th>
+																<th>Logical Volumes</th>
+																<th>Action</th>
+																<!-- Add additional columns as needed -->
+															</tr>
+														</thead>
+														<tbody>
 
-        <h2>Node List</h2>
-        <table class="table" id="NodeListTable">
-            <thead>
-                <tr>
-                    <th>Node Name</th>
-                    <!-- Add additional columns as needed -->
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var node in Model)
-                {
-                    <tr>
-                        <td>@node.NodeName</td>
-                        <td>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>App Name</th>
-                                        <!-- Add additional columns as needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var app in node.Apps)
-                                    {
-                                        <tr>
-                                            <td>@app.AppName</td>
-                                            <!-- Add additional columns as needed -->
-                                            <td>
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Code Pkg Name</th>
-                                                            <!-- Add additional columns as needed -->
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            @foreach (var code in app.CodePkg)
-                                                            {
-                                                            <tr>
-                                                                <td>@code.CodeName</td>
-                                                                <td>@code.ServiceUrl</td>
-                                                                <td>
-                                                                    <table class="table">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Disk Details</th>
-                                                                                <!-- Add additional columns as needed -->
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <table class="table1">
-                                                                                        <tr id="123">
-                                                                                            @foreach (var disk in code.Disks)
-                                                                                            {
-                                                                                                <td id="@disk.DeviceID">
-                                                                                                    <table>
-                                                                                                        <thead>
-                                                                                                            <tr>
-                                                                                                                <th>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Friendly Name
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.DiskName
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </th>
-                                                                                                                <!-- Add additional columns as needed -->
-                                                                                                            </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Device ID
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.DeviceID
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Device Number
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.DeviceNumber
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Media Type
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.MediaType
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Bus Type
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.BusType
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Size
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.Size
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Allocated Size
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.AllocatedSize
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <button class="btn btn-success text-left btn-block">
-                                                                                                                        <span class="pull-left">
-                                                                                                                            Namespace Meta
-                                                                                                                        </span>
-                                                                                                                        <span class="badge pull-right">
-                                                                                                                            @disk.NamespaceMeta
-                                                                                                                        </span>
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </tbody>
-                                                                                                    </table>
-                                                                                                </td>
-                                                                                            }
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </td>
-                                                                <!-- Add additional columns as needed -->
-                                                            </tr>
-                                                        }   
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </td>
-                        <!-- Add additional columns as needed -->
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <hr />
-
-        <div class="row">
-            <div class="col-xs-8 col-xs-offset-2">
-                <form class="col-xs-12 center-block">
-                    <div class="col-xs-6 form-group">
-                        <input id="txtAdd" type="text" class="form-control" placeholder="Add voting option" ng-model="item"/>
-                    </div>
-                    <button id="btnAdd" class="btn btn-default" ng-click="add(item)">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        Add
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <hr/>
-
-        <div class="row">
-            <div class="col-xs-8 col-xs-offset-2">
-                <div class="row">
-                    <div class="col-xs-4">
-                        Click to vote
-                    </div>
-                </div>
-                <div class="row top-buffer" ng-repeat="vote in votes.data">
-                    <div class="col-xs-8">
-                        <button class="btn btn-success text-left btn-block" ng-click="add(vote.key)">
-                            <span class="pull-left">
-                                {{vote.key}}
-                            </span>
-                            <span class="badge pull-right">
-                                {{vote.value}} Votes
-                            </span>
-                        </button>
-                    </div>
-                    <div class="col-xs-4">
-                        <button class="btn btn-danger pull-right btn-block" ng-click="remove(vote.key)">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            Remove
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+															<tr>
+																<td>@device.Name</td>
+																<td>@device.MountPoints</td>
+																<td>@device.Size</td>
+																<td>@device.Type</td>
+																<td>@device.FSType</td>
+																<td>@device.FSUsed</td>
+																<td>@device.Group</td>
+																<td>@device.SubSystems</td>
+																<td>
+																	@foreach (var volume in @device.Volumes)
+																	{
+																		<table class="table" border="1">
+																			<thead>
+																				<tr>
+																					<th>Name</th>
+																					<th>MountPoints</th>
+																					<th>Size</th>
+																					<th>Type</th>
+																					<th>FsType</th>
+																					<th>FsUsed</th>
+																					<th>Group</th>
+																					<th>Subsystems</th>
+																					<th>Action</th>
+																					<!-- Add additional columns as needed -->
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td>@volume.Name</td>
+																					<td>@volume.MountPoints</td>
+																					<td>@volume.Size</td>
+																					<td>@volume.Type</td>
+																					<td>@volume.FSType</td>
+																					<td>@volume.FSUsed</td>
+																					<td>@volume.Group</td>
+																					<td>@volume.SubSystems</td>
+																					<td>
+																						<a href="editContact?id=${contact.name}">Edit</a>
+																						&nbsp;&nbsp;&nbsp;&nbsp;
+																						<a href="deleteContact?id=${contact.name}">Delete</a>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	}
+																</td>
+																<td>
+																	<a href="editContact?id=${contact.name}">Edit</a>
+																	&nbsp;&nbsp;&nbsp;&nbsp;
+																	<a href="deleteContact?id=${contact.name}">Delete</a>
+																</td>
+																<!-- Add additional columns as needed -->
+															</tr>
+														</tbody>
+													</table>
+												}
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br />
+		<div align="center">
+			<h1>Partition View</h1>
+			<h3><a href="CreatePartition">Create New WAL Service</a></h3>
+			<table class="table" id="ClusterListTable2" border="1">
+				<thead>
+					<tr>
+						<th>
+							Cluster Name
+						</th>
+						<th>
+							Regions
+						</th>
+						<th>
+							Partition Count
+						</th>
+						<th>
+							Partitions
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							@Model.Name
+						</td>
+						<td>
+							@Model.Region
+						</td>
+						<td>
+							@Model.PartitionCount
+						</td>
+						<td>
+							@foreach (var partition in Model.Partitions)
+							{
+								<table class="table" id="NodeListTable" border="1">
+									<thead>
+										<tr>
+											<th>
+												Partition Id
+											</th>
+											<th>
+												Application Name
+											</th>
+											<th>
+												Service Name
+											</th>
+											<th>
+												Replicas
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												@partition.Id
+											</td>
+											<td>
+												@partition.ApplicationName
+											</td>
+											<td>
+												@partition.ServiceName
+											</td>
+											<td>
+												@foreach (var replica in partition.Replicas)
+												{
+													<table class="table" id="DeviceListTable" border="1">
+														<thead>
+															<tr>
+																<th>Id</th>
+																<th>Node Name</th>
+																<th>Role</th>
+																<th>Health</th>
+																<th>WebAPI</th>
+																<th>Endpoints</th>
+																<!-- Add additional columns as needed -->
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>@replica.Id</td>
+																<td>@replica.NodeName</td>
+																<td>@replica.Role</td>
+																<td>@replica.Health</td>
+																<td>@replica.WebAPI</td>
+																<td>
+																	@foreach (var endpoint in @replica.Endpoints)
+																	{
+																		<table class="table" border="1">
+																			<thead>
+																				<tr>
+																					<th>Url</th>
+																					<!--<th>Dns</th>
+																					<th>Port</th>
+																					<th>Protocol</th>-->
+																					<!-- Add additional columns as needed -->
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td>@endpoint.Url</td>
+																					<!--<td>@endpoint.Dns</td>
+																					<td>@endpoint.Port</td>
+																					<td>@endpoint.Protocol</td>-->
+																				</tr>
+																			</tbody>
+																		</table>
+																	}
+																</td>
+																<!-- Add additional columns as needed -->
+															</tr>
+														</tbody>
+													</table>
+												}
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
     </div>
 </div>

@@ -17,7 +17,6 @@ namespace VotingData.Controllers
     using Microsoft.ServiceFabric.Data;
     using Microsoft.ServiceFabric.Data.Collections;
     using Newtonsoft.Json.Linq;
-    using System.Collections.ObjectModel;
     using System.Diagnostics;
 
     [Route("api/[controller]")]
@@ -95,8 +94,11 @@ namespace VotingData.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            List<List<KeyValuePair<string, string>>> listOfLists = WmiHelper.getAllSSDs();
-            return this.Json(listOfLists);
+            List<List<KeyValuePair<string, string>>> listOfLists = new List<List<KeyValuePair<string, string>>>();//WmiHelper.getAllSSDs();
+			List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+			list.Add(new KeyValuePair<string, string>("test", "test"));
+			listOfLists.Add(list);
+			return this.Json(listOfLists);
         }
     }
 }

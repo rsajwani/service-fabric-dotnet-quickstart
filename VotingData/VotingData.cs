@@ -38,7 +38,7 @@ namespace VotingData
                     serviceContext =>
                         new KestrelCommunicationListener(
                             serviceContext,
-                            "ServiceEndpoint",
+                            //"ServiceEndpoint",
                             (url, listener) =>
                             {
                                 ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
